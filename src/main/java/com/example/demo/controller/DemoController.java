@@ -10,7 +10,7 @@ public class DemoController {
 
     @GetMapping("/getMsg")
     public String getMsg() {
-        return "this is test msg !!!? branch test";
+        return "this is test msg !!!? branch test conflict test";
     }
 
 }
