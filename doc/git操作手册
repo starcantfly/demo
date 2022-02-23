@@ -1,0 +1,96 @@
+Mac版：
+1、idea添加ssh可参考谷歌中收藏夹中的收藏；
+2、首先在GitHub上面新增加一个resportory，不要勾选新加REDEME.md文件，这样可以生成命令，后面可以再创建；
+3、在idea中，打开项目，vcs中选择enable那个按钮，然后选择git；
+4、然后就可以执行git命令了，git remote add origin git@github.com:starcantfly/product.git  --和远程仓库关联，然后执行
+git remote -v 可以查看关联的远程仓库，然后执行git push -u origin master命令，将项目代码推送到远程仓库；
+5、在GitHub上面新建REDEME.md文件，然后在idea中git pull拉取下来；
+5、后续提交代码修改：
+	add之前回退：
+		可以使用git checkout -- <文件> 命令撤销修改；
+	git add 文件  --将新增或者修改的代码提交到缓存区,新建的文件add之前是红色，add之后是绿色；
+	add之后回退：
+		可以使用git restore --staged <文件>撤销暂存区的修改，恢复到add命令之前的状态 或者 git reset HEAD <file> 也可以回退到add之前的状态；
+	git commit -m "备注"  --将add到缓存区的代码全部提交到本地当前分支,文件颜色变成黑色
+	commit之后回退：
+		git reset --hard HEAD^ 回退到上一个版本，或者git reset --hard commit-id   这个回退是直接撤销本地修改
+	git log 或者 git log --pretty=oneline 查看提交历史记录 或者git reflog查看版本变更记录，都可以查到commit-id;
+
+	把本地库的内容推送到远程，用git push命令，实际上是把当前分支master推送到远程,由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令,从现在起，只要本地作了提交，就可以通过命令：git push origin master;
+6、删除本地和远程库的关联：
+	首先看下远程库名称：git remote -v 
+	然后执行git remote rm origin
+	注意：此处的“删除”其实是解除了本地和远程的绑定关系，并不是物理上删除了远程库。远程库本身并没有任何改动。
+7、克隆GitHub上面已有的仓库代码
+	要克隆一个仓库，首先必须知道仓库的地址，然后使用git clone命令克隆。
+	Git支持多种协议，包括https，但ssh协议速度最快。
+8、创建和切换dev分支
+	git checkout -b dev 
+	git checkout命令加上-b参数表示创建并切换，相当于以下两条命令： git branch dev    git checkout dev
+	git branch命令会列出所有分支，当前分支前面会标一个*号
+	切换分支到master：git checkout master
+
+	切换分支也可以使用switch：
+	我们注意到切换分支使用git checkout <branch>，而前面讲过的撤销修改则是git checkout -- <file>，同一个命令，有两种作用，确实有点令人迷惑。
+	实际上，切换分支这个动作，用switch更科学。因此，最新版本的Git提供了新的git switch命令来切换分支：
+	创建并切换到新的dev分支，可以使用：
+	git switch -c dev
+	直接切换到已有的master分支，可以使用：
+	git switch master
+9、合并分支
+	git merge dev      git merge命令用于合并指定分支到当前分支,当前为master分支，然后合并dev分支到master分支
+	合并完成后，就可以放心地删除dev分支了：git branch -d dev
+
+	小结:
+	Git鼓励大量使用分支：
+	查看分支：git branch
+	创建分支：git branch <name>
+	切换分支：git checkout <name>或者git switch <name>
+	创建+切换分支：git checkout -b <name>或者git switch -c <name>
+	合并某分支到当前分支：git merge <name>
+	删除分支：git branch -d <name>
+10、合并分支时冲突解决：
+	如果分支和maser同时修改了同一行代码，merge的时候就容易出现冲突，此时需要手动修改冲突部分代码，然后再add和commit就行了，最后直接删除分支即可；
+	可以使用git log --graph --pretty=oneline --abbrev-commit查看分支合并情况。
+11、bug分支
+	修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除；
+	当手头工作没有完成时，先把工作现场git stash一下，然后去修复bug，修复后，用git stash list命令查看,再用git stash pop，回到工作现场；
+	在master分支上修复的bug，想要合并到当前dev分支，可以用git cherry-pick <commit>命令，把bug提交的修改“复制”到当前分支，避免重复劳动。
+12、feature新功能分支
+	开发一个新feature，最好新建一个分支；
+	如果要丢弃一个没有被合并过的分支，可以通过git branch -D <name>强行删除。
+13、多人协作
+	查看远程库信息，使用git remote -v；
+	本地新建的分支如果不推送到远程，对其他人就是不可见的；
+	从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+	在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+	建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+	从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+14、rebase
+	rebase操作可以把本地未push的分叉提交历史整理成直线；
+	rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比。
+15、tag标签
+	命令git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+	命令git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+	命令git tag可以查看所有标签；
+	命令git show <tagname>可以查看具体标签信息；
+	命令git push origin <tagname>可以推送一个本地标签；
+	命令git push origin --tags可以推送全部未推送过的本地标签；
+	命令git tag -d <tagname>可以删除一个本地标签；
+	命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
+16、配置别名
+	git config --global alias.co checkout
+	git config --global alias.ci commit
+	git config --global alias.br branch
+	git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+17、sourcetree
+	使用SourceTree可以以图形界面操作Git，省去了敲命令的过程，对于常用的提交、分支、推送等操作来说非常方便。
+	SourceTree使用Git命令执行操作，出错时，仍然需要阅读Git命令返回的错误信息。
+
+
+
+
+
+
+
+
