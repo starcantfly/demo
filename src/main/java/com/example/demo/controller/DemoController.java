@@ -10,7 +10,8 @@ public class DemoController {
 
     @GetMapping("/getMsg")
     public String getMsg() {
-        return "this is test msg !!!? branch test conflict test too";
+        String msg = "git stash test";
+        return msg;
     }
 
 }
