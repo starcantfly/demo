@@ -1,2 +1,18 @@
 server:
   port: 8082
+
+#设置文件上传大小
+#spring:
+#  servlet:
+#    multipart:
+#      max-file-size:
+#      max-request-size:
+  banner:
+    image:
+      location: banner.txt
+
+#自定义配置
+student:
+  address:
+    detailName: 上海市闵行区
+    port: ${server.port}
