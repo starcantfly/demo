@@ -1,5 +1,6 @@
 package com.example.demo.controller.interceptor;
 
+import com.example.demo.exception.GraceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,10 +29,12 @@ public class UserInfoInterceptor implements HandlerInterceptor {
         //下面两个判断可以从数据库或者redis缓存中查询进行判断
         if (StringUtils.isEmpty(headerToken) || StringUtils.isEmpty(userId)) {
             log.error("客户信息为空，请重新输入！");
+            GraceException.display("客户信息为空，请重新输入！");
             return false;
         }
         if (!headerToken.equals("abdxyz") || !userId.equals("1001")) {
             log.error("客户信息不正确！");
+            GraceException.display("客户信息不正确！");
             return false;
         }
         return true;
