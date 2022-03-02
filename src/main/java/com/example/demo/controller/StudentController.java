@@ -68,7 +68,7 @@ public class StudentController {
     public String upload(MultipartFile file) throws Exception{
         file.transferTo(new File("/Users/starcantfly/Downloads/test/" + file.getOriginalFilename()));
 //        file.transferTo(new File("http://172.22.114.176/test/" + file.getOriginalFilename()));
-        return "上传成功";
+        return "上传成功!";
     }
 
 }
